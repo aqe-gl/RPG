@@ -9,34 +9,8 @@ using System.ComponentModel.Design;
 
 namespace RPG
 {
-    enum TypeOfCharacter
-    {
-        None,
-        Archer,
-        Knight,
-        Wizard,
-        Thief,
-        Artist,
-        Warrior
-    }
-    enum TypeOfBonus
-    {
-        None,
-        HP,
-        Damage,
-        Luck
-    }
-
-    class Character
-    {
-        public string name;
-        public int hp = 100;
-        public int damage = 30;
-        public int luck = 30;
-        public TypeOfCharacter type = TypeOfCharacter.None;
-        public TypeOfBonus bonus = TypeOfBonus.None;
-    }
-
+ 
+    
     internal class Program
     {
         static string[] typeNames = { "Unknown character", "Pinpoint Archer", "Brave Knight ", "Clever Wizard", "Sneaky Thief", "Creative Artist",
@@ -49,7 +23,17 @@ namespace RPG
             WriteTextWithBorder("Welcome to the Console RPG");
 
             Character player = new Character();
+            CustomiseCharacter(player);
 
+            Character enemy1 = new Character();
+            CustomiseCharacter(enemy1);
+
+            GameLoop(player);
+        }
+
+
+        static void CustomiseCharacter(Character player)
+        {
             Console.WriteLine("Enter your name: ");
             player.name = Console.ReadLine();
 
@@ -58,8 +42,6 @@ namespace RPG
 
             ChooseBonus(player);
             Console.WriteLine($"You have chosen {bonusNames[(int)player.bonus]}");
-
-            GameLoop(player);
         }
 
         private static void WriteTextWithBorder(string text)
