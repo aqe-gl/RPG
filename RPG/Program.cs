@@ -1,47 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-
-using System.ComponentModel.Design;
 
 namespace RPG
 {
- 
-    
+
+
     internal class Program
     {
         static string[] typeNames = { "Unknown character", "Pinpoint Archer", "Brave Knight ", "Clever Wizard", "Sneaky Thief", "Creative Artist",
             "Daring Warrior" };
         static string[] bonusNames = { "Unknown bonus", "More HP", "More damage", "More luck" };
         static int choice;
+        static List<Character> enemies = new List<Character>();
 
         static void Main(string[] args)
         {
             WriteTextWithBorder("Welcome to the Console RPG");
+            Random r = new Random();
+            int randomNumber = r.Next(1, 10);
+            int secondNumber = r.Next(1, 10);
+            Console.WriteLine(randomNumber);
+            Console.WriteLine(secondNumber);
 
             Character player = new Character();
             CustomiseCharacter(player, false);
 
             Character enemy1 = new Character();
             CustomiseCharacter(enemy1, true);
+            enemies.Add(enemy1);
 
-            Battle(player, enemy1);
-           // GameLoop(player);
+            Character enemy2 = new Character();
+            CustomiseCharacter(enemy2, true);
+            enemies.Add(enemy2);
+
+           // Battle(player, enemy1);
+            GameLoop(player);
         }
 
 
         static void CustomiseCharacter(Character character, bool isEnemy)
         {
             ChooseName(character, isEnemy);
+            if (isEnemy == true)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"The enemy's name is {character.name}");
+            }
 
             ChooseType(character, isEnemy);
-            Console.WriteLine($"You have chosen {typeNames[(int)character.type]}");
+            if (isEnemy == false)
+            {
+                Console.WriteLine($"You have chosen {typeNames[(int)character.type]}");
+            }
+            else
+            {
+                Console.WriteLine($"The enemy you're about to face has chosen {typeNames[(int)character.type]}");
+            }
 
-            ChooseBonus(character);
-            Console.WriteLine($"You have chosen {bonusNames[(int)character.bonus]}");           
+            ChooseBonus(character, isEnemy);
+            if (isEnemy == false)
+            {
+                Console.WriteLine($"You have chosen {bonusNames[(int)character.bonus]}");
+            }
+            else
+            {
+                Console.WriteLine($"The enemy you're about to face has chosen {bonusNames[(int)character.bonus]}");
+                Console.WriteLine();
+            }
         }
 
         static void ChooseName(Character character, bool isEnemy)
@@ -60,7 +85,7 @@ namespace RPG
             }
         }
 
-            private static void WriteTextWithBorder(string text)
+        private static void WriteTextWithBorder(string text)
         {
             string top = "+";
             string middle = $"| {text} |";
@@ -288,20 +313,20 @@ namespace RPG
             while (player.type == TypeOfCharacter.None)
             {
                 if (isEnemy == true)
-            {
+                {
                     Random r = new Random();
                     choice = r.Next(1, typeNames.Length);
-            }
-            else
-            {
+                }
+                else
+                {
                     Console.WriteLine("Choose a character");
                     WriteTextWithBorder($"1 - {typeNames[1]}, 2 - {typeNames[2]}, 3 - {typeNames[3]}");
                     WriteTextWithBorder($"4 - {typeNames[4]}, 5 - {typeNames[5]}, 6 - {typeNames[6]}");
                     choice = int.Parse(Console.ReadLine());
                 }
 
-            
-             
+
+
                 switch (choice)
                 {
                     case 1:
@@ -329,13 +354,23 @@ namespace RPG
                 }
             }
         }
-        static void ChooseBonus(Character player)
+        static void ChooseBonus(Character player, bool isEnemy)
         {
             while (player.bonus == TypeOfBonus.None)
             {
-                Console.WriteLine("Choose a bonus");
-                Console.WriteLine($"1 - {bonusNames[1]}, 2 - {bonusNames[2]}, 3 - {bonusNames[3]}");
-                choice = int.Parse(Console.ReadLine());
+                if (isEnemy == true)
+                {
+                    Random r = new Random();
+
+                    choice = r.Next(1, bonusNames.Length);
+                }
+                else
+                {
+                    Console.WriteLine("Choose a bonus");
+                    Console.WriteLine($"1 - {bonusNames[1]}, 2 - {bonusNames[2]}, 3 - {bonusNames[3]}");
+                    choice = int.Parse(Console.ReadLine());
+                }
+                
                 switch (choice)
                 {
                     case 1:
