@@ -36,7 +36,16 @@ namespace RPG
         {
             target.hp -= damage;
             Console.WriteLine($"{name} is attacking {target.name}");
-            Console.WriteLine($"HP of {name}: {hp} | HP of {target.name}: {target.hp}");
+            Console.WriteLine($"{name} has just inflicted {damage} damage to {target.name}");
+            if (target.hp <= 0)
+            {
+                Console.WriteLine($"The enemy {target.name} has been beaten");
+                Console.WriteLine($"You have {hp} HP left");
+            }
+            else
+            {
+                Console.WriteLine($"HP of {name}: {hp} | HP of {target.name}: {target.hp}");
+            }
         }
     }
 }

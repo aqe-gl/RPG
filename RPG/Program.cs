@@ -23,28 +23,44 @@ namespace RPG
             WriteTextWithBorder("Welcome to the Console RPG");
 
             Character player = new Character();
-            CustomiseCharacter(player);
+            CustomiseCharacter(player, false);
 
             Character enemy1 = new Character();
-            CustomiseCharacter(enemy1);
+            CustomiseCharacter(enemy1, true);
 
-            GameLoop(player);
+            Battle(player, enemy1);
+           // GameLoop(player);
         }
 
 
-        static void CustomiseCharacter(Character player)
+        static void CustomiseCharacter(Character character, bool isEnemy)
         {
-            Console.WriteLine("Enter your name: ");
-            player.name = Console.ReadLine();
+            ChooseName(character, isEnemy);
 
-            ChooseType(player);
-            Console.WriteLine($"You have chosen {typeNames[(int)player.type]}");
+            ChooseType(character, isEnemy);
+            Console.WriteLine($"You have chosen {typeNames[(int)character.type]}");
 
-            ChooseBonus(player);
-            Console.WriteLine($"You have chosen {bonusNames[(int)player.bonus]}");
+            ChooseBonus(character);
+            Console.WriteLine($"You have chosen {bonusNames[(int)character.bonus]}");           
         }
 
-        private static void WriteTextWithBorder(string text)
+        static void ChooseName(Character character, bool isEnemy)
+        {
+            if (isEnemy == true)
+            {
+                string[] names = { "Skeleton", "Kidnapper", "Goblin", "Burglar", "Soldier" };
+                Random r = new Random();
+                int index = r.Next(0, names.Length);
+                character.name = names[index];
+            }
+            else
+            {
+                Console.WriteLine("Enter your name: ");
+                character.name = Console.ReadLine();
+            }
+        }
+
+            private static void WriteTextWithBorder(string text)
         {
             string top = "+";
             string middle = $"| {text} |";
@@ -64,7 +80,7 @@ namespace RPG
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    Console.WriteLine("1 - Walk, 2 - Talk, 3 - Rest, 4 - Train, 5 - Read, 6 - Eat,  7- Finish the day ");
+                    Console.WriteLine("1 - Walk, 2 - Talk, 3 - Rest, 4 - Train, 5 - Read, 6 - Eat,  7 - Duel, 8 - Finish the day ");
                     Console.WriteLine("Choose an action: ");
                     int numOfAction = int.Parse(Console.ReadLine());
                     //Console.WriteLine($"{playerName} made an action: {numOfAction}");
@@ -232,6 +248,8 @@ namespace RPG
                             }
                             break;
                         case 7:
+                            break;
+                        case 8:
                             Console.WriteLine($"{player.name} the {player.type} has went to sleep");
                             i = 10;
                             break;
@@ -250,15 +268,40 @@ namespace RPG
             }
         }
 
-        static void ChooseType(Character player)
+        static void Battle(Character player, Character enemy)
         {
+            while (player.hp > 0 && enemy.hp > 0)
+            {
 
+                player.Attack(enemy);
+                if (enemy.hp > 0)
+                {
+                    enemy.Attack(player);
+                }
+                Console.ReadLine();
+            }
+        }
+
+        static void ChooseType(Character player, bool isEnemy)
+        {
+            int choice;
             while (player.type == TypeOfCharacter.None)
             {
-                Console.WriteLine("Choose a character");
-                WriteTextWithBorder($"1 - {typeNames[1]}, 2 - {typeNames[2]}, 3 - {typeNames[3]}");
-                WriteTextWithBorder($"4 - {typeNames[4]}, 5 - {typeNames[5]}, 6 - {typeNames[6]}");
-                choice = int.Parse(Console.ReadLine());
+                if (isEnemy == true)
+            {
+                    Random r = new Random();
+                    choice = r.Next(1, typeNames.Length);
+            }
+            else
+            {
+                    Console.WriteLine("Choose a character");
+                    WriteTextWithBorder($"1 - {typeNames[1]}, 2 - {typeNames[2]}, 3 - {typeNames[3]}");
+                    WriteTextWithBorder($"4 - {typeNames[4]}, 5 - {typeNames[5]}, 6 - {typeNames[6]}");
+                    choice = int.Parse(Console.ReadLine());
+                }
+
+            
+             
                 switch (choice)
                 {
                     case 1:
